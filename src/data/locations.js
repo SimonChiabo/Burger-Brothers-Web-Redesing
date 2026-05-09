@@ -1,3 +1,9 @@
+export const schedulesDB = {
+  standard: [{ open: "13:00", close: "15:30" }, { open: "19:30", close: "22:30" }],
+  continuous: [{ open: "13:00", close: "22:30" }],
+  evening_only: [{ open: "17:00", close: "23:00" }]
+};
+
 export const locations = [
   {
     id: "andorra-la-vella",
@@ -6,6 +12,7 @@ export const locations = [
     postalCode: "AD500",
     parish: "Andorra la Vella",
     status: "open", 
+    schedule: schedulesDB.standard,
     mapsQuery: "Burger Brothers Andorra la Vella"
   },
   {
@@ -15,6 +22,7 @@ export const locations = [
     postalCode: "AD700",
     parish: "Escaldes-Engordany",
     status: "open",
+    schedule: schedulesDB.continuous,
     mapsQuery: "Burger Brothers Escaldes"
   },
   {
@@ -24,6 +32,7 @@ export const locations = [
     postalCode: "AD200",
     parish: "Encamp",
     status: "open",
+    schedule: schedulesDB.standard,
     mapsQuery: "Burger Brothers Encamp"
   },
   {
@@ -33,6 +42,7 @@ export const locations = [
     postalCode: "AD100",
     parish: "Canillo",
     status: "open",
+    schedule: schedulesDB.standard,
     mapsQuery: "Burger Brothers Canillo"
   },
   {
@@ -42,6 +52,7 @@ export const locations = [
     postalCode: "AD100",
     parish: "Canillo",
     status: "seasonal_closed", 
+    schedule: schedulesDB.evening_only,
     mapsQuery: "Burger Brothers El Tarter"
   },
   {
@@ -51,6 +62,7 @@ export const locations = [
     postalCode: "AD400",
     parish: "La Massana",
     status: "open",
+    schedule: schedulesDB.standard,
     mapsQuery: "Burger Brothers La Massana"
   },
   {
@@ -60,6 +72,7 @@ export const locations = [
     postalCode: "AD400",
     parish: "La Massana",
     status: "coming_soon",
+    schedule: schedulesDB.standard,
     mapsQuery: "Burger Brothers Arinsal"
   }
 ];

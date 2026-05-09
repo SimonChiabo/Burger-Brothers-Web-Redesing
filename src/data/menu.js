@@ -225,8 +225,5 @@ export const categories = [
   { id: 'all', name: 'Ver Todo' },
   { id: 'smash_burger', name: 'Smash Burgers' },
   { id: 'patatas', name: 'Patatas' },
-  { id: 'menu_completo', name: 'Menús' },
-  { id: 'bebidas', name: 'Bebidas' },
   { id: 'postres', name: 'Postres' },
-  { id: 'cafes_infusiones', name: 'Cafés' },
 ];

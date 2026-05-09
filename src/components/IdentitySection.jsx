@@ -1,4 +1,8 @@
+import { locations } from '../data/locations';
+
 const IdentitySection = () => {
+  const activeLocationsCount = locations.filter(loc => loc.status !== 'coming_soon').length;
+
   return (
     <section id="about" className="py-32 bg-bb-charcoal relative overflow-hidden">
       {/* Background Texture Placeholder */}
@@ -49,7 +53,7 @@ const IdentitySection = () => {
                 <p className="text-bb-white/40 text-sm uppercase tracking-wider">De Experiencia</p>
               </div>
               <div>
-                <p className="text-3xl font-bold text-bb-accent mb-1">5 LOCALES</p>
+                <p className="text-3xl font-bold text-bb-accent mb-1">{activeLocationsCount} LOCALES</p>
                 <p className="text-bb-white/40 text-sm uppercase tracking-wider">En Toda Andorra</p>
               </div>
             </div>

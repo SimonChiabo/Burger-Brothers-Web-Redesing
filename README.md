@@ -1,16 +1,60 @@
-# React + Vite
+# Burger Brothers - Web Redesign (Phase 2)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Professional redesign of the Burger Brothers website using a high-performance, modern stack. This project focuses on a gourmet-industrial aesthetic, optimized user experience, and real-time business logic.
 
-Currently, two official plugins are available:
+## 🚀 Tech Stack
+- **Frontend**: React 18 + Vite
+- **Styling**: Tailwind CSS + Custom Design System
+- **Icons**: Lucide React
+- **Animations**: Framer Motion (for smooth UI transitions)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 📁 Project Structure
 
-## React Compiler
+```text
+src/
+├── assets/             # Static assets (images, logos)
+├── components/         # Reusable UI components
+│   ├── HeroSection     # Main landing visual
+│   ├── IdentitySection # "About Us" and brand values
+│   ├── MenuSection     # Dynamic menu with relational logic
+│   └── LocationsSection# Real-time restaurant availability
+├── data/               # Business logic and data layers
+│   ├── menu.js         # Relational database for products and ingredients
+│   └── locations.js    # Restaurant database with scalable schedules
+├── layouts/            # Page layouts and wrappers
+├── index.css           # Global styles and design tokens
+└── main.jsx            # Application entry point
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🏗️ Core Architecture Principles
 
-## Expanding the ESLint configuration
+### 1. Relational Data Layer (`src/data/menu.js`)
+Unlike static menus, our architecture separates **Ingredients** from **Products**. This allows for:
+- Dynamic price calculations.
+- Automatic composition listing.
+- Easy ingredient updates across the entire menu.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 2. Hours Engine (`src/data/locations.js`)
+We use a scalable "Schedule Template" dictionary (`schedulesDB`). This avoids hardcoding hours into components and allows for centralized management of opening times across different parishes in Andorra.
+
+### 3. Forced Timezone Logic
+To ensure tourists see accurate opening times regardless of their device settings, the "Hours Engine" forces the `Europe/Andorra` timezone for all temporal checks.
+
+## 🛠️ Development
+
+```bash
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+
+# Build for production
+npm run build
+```
+
+## 🎨 Design System
+The project uses a custom color palette defined in `tailwind.config.js`:
+- `bb-charcoal`: #0F0F0F (Main background)
+- `bb-accent`: #D4AF37 (Gold/Brand color)
+- `bb-white`: #F5F5F5 (Typography)

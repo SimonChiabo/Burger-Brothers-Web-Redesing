@@ -1,7 +1,50 @@
+import { useState, useEffect } from 'react';
 import { locations } from '../data/locations';
 import { MapPin, ExternalLink, Clock, Construction } from 'lucide-react';
 
 const LocationsSection = () => {
+  const [now, setNow] = useState(null);
+
+  useEffect(() => {
+    // Evitamos problemas de hidratación calculando el tiempo solo en el cliente
+    setNow(new Date());
+    const timer = setInterval(() => setNow(new Date()), 60000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const checkIsOpen = (schedule) => {
+    if (!now) return false;
+
+    try {
+      const andorraTime = new Intl.DateTimeFormat('en-GB', {
+        timeZone: 'Europe/Andorra',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+      }).format(now);
+
+      const [currentH, currentM] = andorraTime.split(':').map(Number);
+      const nowInMinutes = currentH * 60 + currentM;
+
+      return schedule.some(block => {
+        const [openH, openM] = block.open.split(':').map(Number);
+        const [closeH, closeM] = block.close.split(':').map(Number);
+        const openInMinutes = openH * 60 + openM;
+        const closeInMinutes = closeH * 60 + closeM;
+        
+        // Manejo de cierre después de medianoche (si fuera necesario, aunque aquí no lo es por ahora)
+        if (closeInMinutes < openInMinutes) {
+          return nowInMinutes >= openInMinutes || nowInMinutes < closeInMinutes;
+        }
+        
+        return nowInMinutes >= openInMinutes && nowInMinutes < closeInMinutes;
+      });
+    } catch (e) {
+      console.error("Error calculating Andorra time:", e);
+      return false;
+    }
+  };
+
   return (
     <section id="locations" className="py-32 bg-bb-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -15,15 +58,19 @@ const LocationsSection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {locations.map((loc) => {
-            const isOpen = loc.status === 'open';
+            const isBaseOpen = loc.status === 'open';
             const isSeasonal = loc.status === 'seasonal_closed';
             const isComingSoon = loc.status === 'coming_soon';
+            
+            // Lógica de motor de horarios (solo si el local está 'open')
+            const isOpenNow = isBaseOpen && checkIsOpen(loc.schedule);
+            const isClosedNow = isBaseOpen && !isOpenNow;
 
             return (
               <div 
                 key={loc.id}
                 className={`group relative rounded-3xl p-8 border transition-all duration-500 overflow-hidden ${
-                  isOpen 
+                  isOpenNow 
                     ? 'bg-bb-charcoal border-bb-white/10 hover:border-bb-accent/50 hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)]' 
                     : 'bg-bb-charcoal/40 border-bb-white/5 grayscale'
                 }`}
@@ -48,18 +95,28 @@ const LocationsSection = () => {
                 {/* Card Content */}
                 <div className="relative z-0">
                   <div className="flex items-start justify-between mb-6">
-                    <div className={`p-3 rounded-2xl ${isOpen ? 'bg-bb-accent/10 text-bb-accent' : 'bg-bb-white/5 text-bb-white/20'}`}>
+                    <div className={`p-3 rounded-2xl ${isOpenNow ? 'bg-bb-accent/10 text-bb-accent' : 'bg-bb-white/5 text-bb-white/20'}`}>
                       <MapPin size={24} />
                     </div>
-                    {isOpen && (
-                      <span className="text-[10px] font-bold text-green-500 uppercase tracking-widest flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-ping"></span>
-                        Abierto ahora
-                      </span>
+                    
+                    {now && isBaseOpen && (
+                      <div className="text-right">
+                        {isOpenNow ? (
+                          <span className="text-[10px] font-bold text-green-500 uppercase tracking-widest flex items-center gap-1.5 justify-end">
+                            <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-ping"></span>
+                            Abierto ahora
+                          </span>
+                        ) : (
+                          <span className="text-[10px] font-bold text-bb-white/30 uppercase tracking-widest flex items-center gap-1.5 justify-end">
+                            <span className="w-1.5 h-1.5 bg-bb-white/20 rounded-full"></span>
+                            Cerrado ahora
+                          </span>
+                        )}
+                      </div>
                     )}
                   </div>
 
-                  <h3 className={`text-2xl font-bold mb-2 ${!isOpen && 'text-bb-white/40'}`}>
+                  <h3 className={`text-2xl font-bold mb-2 ${!isOpenNow && 'text-bb-white/40'}`}>
                     {loc.name}
                   </h3>
                   <p className="text-bb-white/40 text-sm mb-8 leading-relaxed">
@@ -68,12 +125,16 @@ const LocationsSection = () => {
                   </p>
 
                   {/* Action Button */}
-                  {isOpen ? (
+                  {isBaseOpen ? (
                     <a 
                       href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc.mapsQuery)}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-full flex items-center justify-center gap-2 py-4 rounded-xl bg-bb-white/5 border border-bb-white/10 text-bb-white font-bold hover:bg-bb-accent hover:text-bb-black hover:border-bb-accent transition-all duration-300 group/btn"
+                      className={`w-full flex items-center justify-center gap-2 py-4 rounded-xl border font-bold transition-all duration-300 group/btn ${
+                        isOpenNow 
+                          ? 'bg-bb-white/5 border-bb-white/10 text-bb-white hover:bg-bb-accent hover:text-bb-black hover:border-bb-accent' 
+                          : 'bg-bb-white/5 border-bb-white/5 text-bb-white/40 hover:border-bb-white/20'
+                      }`}
                     >
                       CÓMO LLEGAR
                       <ExternalLink size={16} className="opacity-50 group-hover/btn:opacity-100" />
