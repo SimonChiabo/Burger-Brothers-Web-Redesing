@@ -2,6 +2,21 @@
 
 @import "tailwindcss";
 
+@theme {
+  /* Brand Colors */
+  --color-bb-black: #111111;
+  --color-bb-charcoal: #2A2A2A;
+  --color-bb-white: #F9FAFB;
+  --color-bb-wood-light: #D4A373;
+  --color-bb-wood-dark: #A67C52;
+  --color-bb-accent: #F4B41A;
+  --color-bb-red: #E31D2B;
+
+  /* Typography */
+  --font-sans: "Inter", "sans-serif";
+  --font-display: "Oswald", "sans-serif";
+}
+
 @layer base {
   html {
     @apply scroll-smooth;
