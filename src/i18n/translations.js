@@ -216,7 +216,7 @@ export const translations = {
       badge: "Notre Identité",
       title: "NOUS NE SOMMES PAS",
       titleAccent: "UNE FRANCHISE DE PLUS",
-      p1: "Nés au cœur des Pyrénées en 2013 avec une mission claire : redonner son âme au burger. Alors que d'autres misent sur la vitesse, nous misons sur le processus artisanal.",
+      p1: "Nés au cœur des Pyrénées en 2013 avec une mission claire: redonner son âme au burger. Alors que d'autres misent sur la vitesse, nous misons sur le processus artisanal.",
       p2: "Nous utilisons de la viande sélectionnée d'élevages locaux et du pain brioché cuit chaque jour. Chaque ingrédient raconte une histoire de notre terre, l'Andorre.",
       stat_years: "Années d'Expérience",
       stat_locs: "Partout en Andorre"
