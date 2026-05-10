@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { menuDB, categories, ingredientsDB } from '../data/menu';
 import { Star } from 'lucide-react';
+import { useTranslation } from '../i18n/LanguageContext';
 
 const ProductCard = ({ item, getIngredients }) => {
+  const { t } = useTranslation();
   const [isMenu, setIsMenu] = useState(false);
   const isSmashBurger = item.category === 'smash_burger';
   const displayPrice = isMenu ? item.basePrice + 4 : item.basePrice;
@@ -18,7 +20,7 @@ const ProductCard = ({ item, getIngredients }) => {
           </h3>
           {item.isPopular && (
             <span className="flex items-center gap-1 bg-bb-accent/10 text-bb-accent text-[9px] font-black uppercase px-2 py-0.5 rounded border border-bb-accent/20">
-              <Star size={8} fill="currentColor" /> Popular
+              <Star size={8} fill="currentColor" /> {t('menu.popular')}
             </span>
           )}
         </div>
@@ -38,12 +40,12 @@ const ProductCard = ({ item, getIngredients }) => {
                 <div className={`w-3 h-3 rounded-full bg-bb-white transition-transform duration-300 ${isMenu ? 'translate-x-5' : 'translate-x-0'}`}></div>
               </div>
               <span className={`text-xs font-bold uppercase tracking-wider transition-colors ${isMenu ? 'text-bb-accent' : 'text-bb-white/40'}`}>
-                + Convertir en Menú (+4.00€)
+                {t('menu.convert_menu')}
               </span>
             </button>
             {isMenu && (
               <p className="text-[10px] text-bb-white/30 italic animate-in fade-in slide-in-from-left-1 duration-300">
-                El menú incluye ración de patatas y bebida.
+                {t('menu.menu_includes')}
               </p>
             )}
           </div>
@@ -60,13 +62,12 @@ const ProductCard = ({ item, getIngredients }) => {
 };
 
 const MenuSection = () => {
+  const { t } = useTranslation();
   const [activeCategory, setActiveCategory] = useState('all');
 
   const activeCategoryIds = categories.map(c => c.id);
   const filteredItems = menuDB.filter(item => {
-    // Solo mostrar items de las categorías visibles (excluye bebidas, cafés y menús completos)
     if (!activeCategoryIds.includes(item.category) && item.category !== 'all') return false;
-    
     if (activeCategory === 'all') return true;
     return item.category === activeCategory;
   });
@@ -84,10 +85,10 @@ const MenuSection = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <span className="text-bb-accent font-bold uppercase tracking-widest text-sm mb-4 block">Sabor Auténtico</span>
-          <h2 className="text-4xl md:text-6xl font-bold mb-6">NUESTRA <span className="text-bb-accent">CARTA</span></h2>
+          <span className="text-bb-accent font-bold uppercase tracking-widest text-sm mb-4 block">{t('menu.badge')}</span>
+          <h2 className="text-4xl md:text-6xl font-bold mb-6 uppercase">{t('menu.title')} <span className="text-bb-accent">{t('menu.titleAccent')}</span></h2>
           <p className="text-bb-white/50 text-lg font-light max-w-2xl mx-auto">
-            Selecciona una categoría y descubre por qué somos el referente de la hamburguesa artesanal en Andorra.
+            {t('menu.subtitle')}
           </p>
         </div>
 
@@ -97,13 +98,13 @@ const MenuSection = () => {
             <button
               key={category.id}
               onClick={() => setActiveCategory(category.id)}
-              className={`whitespace-nowrap px-8 py-3 rounded-full text-sm font-bold border transition-all duration-300 ${
+              className={`whitespace-nowrap px-8 py-3 rounded-full text-sm font-bold border transition-all duration-300 uppercase ${
                 activeCategory === category.id
                   ? 'bg-bb-accent border-bb-accent text-bb-black shadow-[0_0_20px_rgba(244,180,26,0.3)]'
                   : 'bg-bb-charcoal/50 border-bb-white/10 text-bb-white hover:border-bb-accent/50'
               }`}
             >
-              {category.name}
+              {t(`menu.categories.${category.id}`)}
             </button>
           ))}
         </div>
@@ -118,7 +119,7 @@ const MenuSection = () => {
         {/* Empty State */}
         {filteredItems.length === 0 && (
           <div className="text-center py-20">
-            <p className="text-bb-white/30 text-lg italic">Próximamente más productos en esta categoría...</p>
+            <p className="text-bb-white/30 text-lg italic">{t('menu.empty')}</p>
           </div>
         )}
       </div>

@@ -1,13 +1,22 @@
-import { useState } from 'react';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import React, { useState } from 'react';
+import { Menu, X } from 'lucide-react';
+import { useTranslation } from '../i18n/LanguageContext';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { t, language, setLanguage } = useTranslation();
 
   const navLinks = [
-    { name: 'Nosotros', href: '#about' },
-    { name: 'Ubicaciones', href: '#locations' },
-    { name: 'Nuestra Carta', href: '#menu' },
+    { name: t('nav.about'), href: '#about' },
+    { name: t('nav.locations'), href: '#locations' },
+    { name: t('nav.menu'), href: '#menu' },
+  ];
+
+  const languages = [
+    { code: 'es', label: 'ES' },
+    { code: 'ca', label: 'CA' },
+    { code: 'en', label: 'EN' },
+    { code: 'fr', label: 'FR' },
   ];
 
   return (
@@ -26,7 +35,7 @@ const Navbar = () => {
             <div className="flex items-baseline space-x-6">
               {navLinks.map((link) => (
                 <a
-                  key={link.name}
+                  key={link.href}
                   href={link.href}
                   className="text-bb-white/80 hover:text-bb-accent px-3 py-2 text-sm font-medium transition-colors"
                 >
@@ -37,17 +46,25 @@ const Navbar = () => {
 
             {/* Language & CTA */}
             <div className="flex items-center gap-6 border-l border-bb-charcoal pl-6">
-              <div className="relative group">
-                <button className="flex items-center gap-1 text-bb-white/80 text-sm hover:text-bb-accent transition-colors">
-                  ESP <ChevronDown size={14} />
-                </button>
-                <div className="absolute right-0 mt-2 w-24 bg-bb-charcoal rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 p-2 text-sm border border-bb-white/10">
-                  <a href="#" className="block py-1.5 px-2 hover:bg-bb-black rounded hover:text-bb-accent">CAT</a>
-                  <a href="#" className="block py-1.5 px-2 hover:bg-bb-black rounded hover:text-bb-accent">ENG</a>
-                </div>
+              {/* Minimalist Language Selector */}
+              <div className="flex items-center gap-2 text-[10px] font-bold tracking-widest text-bb-white/30">
+                {languages.map((lang, idx) => (
+                  <React.Fragment key={lang.code}>
+                    <button
+                      onClick={() => setLanguage(lang.code)}
+                      className={`hover:text-bb-accent transition-all duration-300 ${
+                        language === lang.code ? 'text-bb-accent' : 'text-bb-white/40'
+                      }`}
+                    >
+                      {lang.label}
+                    </button>
+                    {idx < languages.length - 1 && <span className="pointer-events-none">|</span>}
+                  </React.Fragment>
+                ))}
               </div>
-              <a href="#locations" className="btn-primary">
-                ENCUÉNTRANOS
+
+              <a href="#locations" className="btn-primary uppercase">
+                {t('nav.order')}
               </a>
             </div>
           </div>
@@ -73,7 +90,7 @@ const Navbar = () => {
         <div className="px-4 pt-2 space-y-2">
           {navLinks.map((link) => (
             <a
-              key={link.name}
+              key={link.href}
               href={link.href}
               onClick={() => setIsOpen(false)}
               className="block text-bb-white/80 hover:text-bb-accent px-3 py-4 text-lg font-medium border-b border-bb-charcoal/50"
@@ -81,21 +98,30 @@ const Navbar = () => {
               {link.name}
             </a>
           ))}
-          <div className="pt-6 flex flex-col gap-4">
-            <div className="flex justify-between items-center px-3 text-bb-white/60 text-sm uppercase tracking-widest">
-              <span>Idioma</span>
-              <div className="flex gap-4">
-                <span className="text-bb-accent">ESP</span>
-                <span className="hover:text-bb-accent cursor-pointer">CAT</span>
-                <span className="hover:text-bb-accent cursor-pointer">ENG</span>
+          <div className="pt-6 flex flex-col gap-6">
+            <div className="flex flex-col gap-3 px-3">
+              <span className="text-bb-white/20 text-[10px] font-bold uppercase tracking-[0.2em]">Idioma</span>
+              <div className="flex gap-4 text-sm font-bold tracking-widest">
+                {languages.map((lang) => (
+                  <button
+                    key={lang.code}
+                    onClick={() => {
+                      setLanguage(lang.code);
+                      setIsOpen(false);
+                    }}
+                    className={`${language === lang.code ? 'text-bb-accent' : 'text-bb-white/40'}`}
+                  >
+                    {lang.label}
+                  </button>
+                ))}
               </div>
             </div>
             <a
               href="#locations"
               onClick={() => setIsOpen(false)}
-              className="btn-primary text-center py-4 text-base"
+              className="btn-primary text-center py-4 text-base uppercase"
             >
-              ENCUÉNTRANOS
+              {t('nav.order')}
             </a>
           </div>
         </div>

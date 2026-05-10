@@ -1,6 +1,8 @@
 import { locations } from '../data/locations';
+import { useTranslation } from '../i18n/LanguageContext';
 
 const IdentitySection = () => {
+  const { t } = useTranslation();
   const activeLocationsCount = locations.filter(loc => loc.status !== 'coming_soon').length;
 
   return (
@@ -31,30 +33,26 @@ const IdentitySection = () => {
           {/* Text Side */}
           <div>
             <div className="mb-8">
-              <span className="text-bb-accent font-bold uppercase tracking-widest text-sm mb-4 block">Nuestra Identidad</span>
-              <h2 className="text-4xl md:text-6xl font-bold leading-tight mb-8">
-                NO SOMOS UNA <br /> 
-                <span className="text-bb-accent">FRANQUICIA</span> MÁS
+              <span className="text-bb-accent font-bold uppercase tracking-widest text-sm mb-4 block">{t('about.badge')}</span>
+              <h2 className="text-4xl md:text-6xl font-bold leading-tight mb-8 uppercase">
+                {t('about.title')} <br /> 
+                <span className="text-bb-accent">{t('about.titleAccent')}</span>
               </h2>
             </div>
             
             <div className="space-y-6 text-bb-white/70 text-lg md:text-xl font-light leading-relaxed">
-              <p>
-                Nacimos en el corazón de los Pirineos en 2013 con una misión clara: devolverle el alma a la hamburguesa. Mientras otros apuestan por la velocidad, nosotros apostamos por el <strong className="text-bb-white font-bold">proceso artesanal</strong>.
-              </p>
-              <p>
-                Utilizamos carne seleccionada de ganaderías locales y pan brioche horneado a diario. Cada ingrediente cuenta una historia de nuestra tierra, Andorra.
-              </p>
+              <p>{t('about.p1')}</p>
+              <p>{t('about.p2')}</p>
             </div>
 
             <div className="mt-12 grid grid-cols-2 gap-8 border-t border-bb-white/10 pt-12">
               <div>
-                <p className="text-3xl font-bold text-bb-accent mb-1">+10 AÑOS</p>
-                <p className="text-bb-white/40 text-sm uppercase tracking-wider">De Experiencia</p>
+                <p className="text-3xl font-bold text-bb-accent mb-1 uppercase">+10 {t('about.stat_years').split(' ')[0]}</p>
+                <p className="text-bb-white/40 text-sm uppercase tracking-wider">{t('about.stat_years')}</p>
               </div>
               <div>
-                <p className="text-3xl font-bold text-bb-accent mb-1">{activeLocationsCount} LOCALES</p>
-                <p className="text-bb-white/40 text-sm uppercase tracking-wider">En Toda Andorra</p>
+                <p className="text-3xl font-bold text-bb-accent mb-1 uppercase">{activeLocationsCount} {t('nav.locations')}</p>
+                <p className="text-bb-white/40 text-sm uppercase tracking-wider">{t('about.stat_locs')}</p>
               </div>
             </div>
           </div>
